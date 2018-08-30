@@ -1,7 +1,7 @@
 # Учебный проект «Код и Магия» [![Build status][travis-image]][travis-url]
 
 * Студент: [Пётр Девятериков](https://up.htmlacademy.ru/javascript/15/user/510833).
-* Наставник: `Неизвестно`.
+* Наставник: Сергей Буртылёв.
 
 ---
 
