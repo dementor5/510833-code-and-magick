@@ -23,9 +23,25 @@ var COLUMN_TEXT_UP_GUP = 5;
 var COLUMN_TEXT_BOTTOM_GUP = 15;
 var COLUMN_PLAYER_COLOR = 'rgba(255, 0, 0, 1)';
 
-function renderCloud(ctx, color, x, y) {
+function renderShape(ctx, color, x, y) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
+}
+
+function renderCloud(ctx) {
+  renderShape(
+      ctx,
+      SHADOW_COLOR,
+      CLOUD_X + SHADOW_SHIFT,
+      CLOUD_Y + SHADOW_SHIFT
+  );
+
+  renderShape(
+      ctx,
+      CLOUD_COLOR,
+      CLOUD_X,
+      CLOUD_Y
+  );
 }
 
 function renderText(ctx, text, x, y) {
@@ -34,25 +50,7 @@ function renderText(ctx, text, x, y) {
   ctx.fillText(text, x, y);
 }
 
-function getRandomInRange(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function renderStatistics(ctx, names, times) {
-  renderCloud(
-      ctx,
-      SHADOW_COLOR,
-      CLOUD_X + SHADOW_SHIFT,
-      CLOUD_Y + SHADOW_SHIFT
-  );
-
-  renderCloud(
-      ctx,
-      CLOUD_COLOR,
-      CLOUD_X,
-      CLOUD_Y
-  );
-
+function renderGreeting(ctx) {
   renderText(
       ctx,
       'Ура вы победили!',
@@ -66,36 +64,49 @@ function renderStatistics(ctx, names, times) {
       CLOUD_X + GAP,
       CLOUD_Y + GAP + TEXT_GAP * 2
   );
+}
+
+function getRandomInRange(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function renderColumn(ctx, names, times, maxTime, position) {
+  var columnHeight = Math.round(COLUMN_MAX_HEIGHT * times[position] / maxTime);
+
+  renderText(
+      ctx,
+      Math.round(times[position]),
+      COLUMN_FIRST_GAP + (COLUMN_WIDTH + COLUMN_INTERVAL) * position,
+      COLUMN_BOTTOM - columnHeight - COLUMN_TEXT_UP_GUP
+  );
+
+  ctx.fillStyle = (names[position] === 'Вы') ?
+    COLUMN_PLAYER_COLOR :
+    'rgb(0, 0,' + getRandomInRange(0, 255) + ')';
+
+  ctx.fillRect(
+      COLUMN_FIRST_GAP + (COLUMN_WIDTH + COLUMN_INTERVAL) * position,
+      COLUMN_BOTTOM - columnHeight,
+      COLUMN_WIDTH,
+      columnHeight
+  );
+
+  renderText(
+      ctx,
+      names[position],
+      COLUMN_FIRST_GAP + (COLUMN_WIDTH + COLUMN_INTERVAL) * position,
+      COLUMN_BOTTOM + COLUMN_TEXT_BOTTOM_GUP
+  );
+}
+
+function renderStatistics(ctx, names, times) {
+  renderCloud(ctx);
+  renderGreeting(ctx);
 
   var maxTime = Math.max.apply(null, times);
 
   for (var i = 0; i < names.length; i++) {
-    var columnHeight = Math.round(COLUMN_MAX_HEIGHT * times[i] / maxTime);
-
-    renderText(
-        ctx,
-        Math.round(times[i]),
-        COLUMN_FIRST_GAP + (COLUMN_WIDTH + COLUMN_INTERVAL) * i,
-        COLUMN_BOTTOM - columnHeight - COLUMN_TEXT_UP_GUP
-    );
-
-    ctx.fillStyle = (names[i] === 'Вы') ?
-      COLUMN_PLAYER_COLOR :
-      'rgb(0, 0,' + getRandomInRange(0, 255) + ')';
-
-    ctx.fillRect(
-        COLUMN_FIRST_GAP + (COLUMN_WIDTH + COLUMN_INTERVAL) * i,
-        COLUMN_BOTTOM - columnHeight,
-        COLUMN_WIDTH,
-        columnHeight
-    );
-
-    renderText(
-        ctx,
-        names[i],
-        COLUMN_FIRST_GAP + (COLUMN_WIDTH + COLUMN_INTERVAL) * i,
-        COLUMN_BOTTOM + COLUMN_TEXT_BOTTOM_GUP
-    );
+    renderColumn(ctx, names, times, maxTime, i);
   }
 }
 
