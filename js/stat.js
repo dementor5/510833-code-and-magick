@@ -38,18 +38,6 @@ function getRandomInRange(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function getMaxElement(arr) {
-  var maxElement = arr[0];
-
-  for (var i = 1; i < arr.length; i++) {
-    if (arr[i] > maxElement) {
-      maxElement = arr[i];
-    }
-  }
-
-  return maxElement;
-}
-
 function renderStatistics(ctx, names, times) {
   renderCloud(
       ctx,
@@ -79,7 +67,7 @@ function renderStatistics(ctx, names, times) {
       CLOUD_Y + GAP + TEXT_GAP * 2
   );
 
-  var maxTime = getMaxElement(times);
+  var maxTime = Math.max.apply(null, times);
 
   for (var i = 0; i < names.length; i++) {
     var columnHeight = Math.round(COLUMN_MAX_HEIGHT * times[i] / maxTime);
