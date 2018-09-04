@@ -82,7 +82,6 @@ function renderStatistics(ctx, names, times) {
   var maxTime = getMaxElement(times);
 
   for (var i = 0; i < names.length; i++) {
-
     var columnHeight = Math.round(COLUMN_MAX_HEIGHT * times[i] / maxTime);
 
     renderText(
@@ -111,4 +110,6 @@ function renderStatistics(ctx, names, times) {
     );
   }
 }
+
+window.renderStatistics = renderStatistics;
 
