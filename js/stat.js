@@ -70,22 +70,19 @@ function getRandomInRange(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function renderColumn(ctx, names, times, maxTime, position) {
-  var columnHeight = Math.round(COLUMN_MAX_HEIGHT * times[position] / maxTime);
+function renderColumn(ctx, columnX, columnHeight, columnColor, name, time) {
 
   renderText(
       ctx,
-      Math.round(times[position]),
-      COLUMN_FIRST_GAP + (COLUMN_WIDTH + COLUMN_INTERVAL) * position,
+      time,
+      columnX,
       COLUMN_BOTTOM - columnHeight - COLUMN_TEXT_UP_GUP
   );
 
-  ctx.fillStyle = (names[position] === 'Вы') ?
-    COLUMN_PLAYER_COLOR :
-    'rgb(0, 0,' + getRandomInRange(0, 255) + ')';
+  ctx.fillStyle = columnColor;
 
   ctx.fillRect(
-      COLUMN_FIRST_GAP + (COLUMN_WIDTH + COLUMN_INTERVAL) * position,
+      columnX,
       COLUMN_BOTTOM - columnHeight,
       COLUMN_WIDTH,
       columnHeight
@@ -93,8 +90,8 @@ function renderColumn(ctx, names, times, maxTime, position) {
 
   renderText(
       ctx,
-      names[position],
-      COLUMN_FIRST_GAP + (COLUMN_WIDTH + COLUMN_INTERVAL) * position,
+      name,
+      columnX,
       COLUMN_BOTTOM + COLUMN_TEXT_BOTTOM_GUP
   );
 }
@@ -104,9 +101,20 @@ function renderStatistics(ctx, names, times) {
   renderGreeting(ctx);
 
   var maxTime = Math.max.apply(null, times);
+  var columnX;
+  var columnHeight;
+  var columnColor;
 
   for (var i = 0; i < names.length; i++) {
-    renderColumn(ctx, names, times, maxTime, i);
+    columnX = COLUMN_FIRST_GAP + (COLUMN_WIDTH + COLUMN_INTERVAL) * i;
+
+    columnHeight = Math.round(COLUMN_MAX_HEIGHT * times[i] / maxTime);
+
+    columnColor = (names[i] === 'Вы') ?
+      COLUMN_PLAYER_COLOR :
+      'rgb(0, 0,' + getRandomInRange(0, 255) + ')';
+
+    renderColumn(ctx, columnX, columnHeight, columnColor, names[i], Math.round(times[i]));
   }
 }
 
