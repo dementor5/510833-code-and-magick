@@ -118,5 +118,7 @@ function renderStatistics(ctx, names, times) {
   }
 }
 
+window.getRandomInRange = getRandomInRange;
 window.renderStatistics = renderStatistics;
+
 
