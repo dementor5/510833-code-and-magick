@@ -41,7 +41,7 @@ var WIZARD_EYES_COLORS = [
 
 var WIZARD_COUNT = 4;
 
-function unhideElementBySelector(selector) {
+function showElementBySelector(selector) {
   document.querySelector(selector).classList.remove('hidden');
 }
 
@@ -106,7 +106,7 @@ function appendWizardsOnPage(wizardsElements) {
   similarListElement.appendChild(wizardsElements);
 }
 
-unhideElementBySelector('.setup');
+showElementBySelector('.setup');
 var wizardElements = prepareWizardsElements();
 appendWizardsOnPage(wizardElements);
-unhideElementBySelector('.setup-similar');
+showElementBySelector('.setup-similar');
