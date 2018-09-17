@@ -224,13 +224,8 @@ function hideElement(element) {
 }
 
 function getNextItem(oldItem, items) {
-  var nextIndex = oldItem ? items.indexOf(oldItem) + 1 : 1;
-
-  if (nextIndex === items.length) {
-    nextIndex = 0;
-  }
-
-  return items[nextIndex];
+  var nextItem = items[items.indexOf(oldItem) + 1];
+  return nextItem ? nextItem : items[0];
 }
 
 function getRandomItem(items) {
