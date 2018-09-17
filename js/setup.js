@@ -64,7 +64,7 @@ var fireballWrap = setup.querySelector('.setup-fireball-wrap');
 var fireballWrapHiddenInput =
   fireballWrap.querySelector('[name="fireball-color"]');
 
-appendWizardsOnPage(prepareWizardsElements());
+appendWizardsOnPage(prepareWizardsElements(WIZARD_COUNT));
 showElement(setupSimilar);
 
 setupOpen.addEventListener('click', function () {
@@ -87,7 +87,7 @@ setupClose.addEventListener('keydown', function (evt) {
   }
 });
 
-userNameInput.addEventListener('invalid', function () {
+userNameInput.addEventListener('input', function () {
   if (userNameInput.validity.tooShort) {
     userNameInput
 			.setCustomValidity('Имя должно состоять минимум из 2-х символов');
@@ -100,14 +100,6 @@ userNameInput.addEventListener('invalid', function () {
   }
 });
 
-userNameInput.addEventListener('input', function (evt) {
-  var target = evt.target;
-  if (target.value.length < 2) {
-    target.setCustomValidity('Имя должно состоять минимум из 2-х символов');
-  } else {
-    target.setCustomValidity('');
-  }
-});
 
 wizardCoat.addEventListener('click', function () {
   changeWizardCoatColor();
@@ -125,9 +117,9 @@ function appendWizardsOnPage(wizardsElements) {
   setupSimilarList.appendChild(wizardsElements);
 }
 
-function prepareWizardsElements() {
+function prepareWizardsElements(elementsQuantity) {
   var fragment = document.createDocumentFragment();
-  var wizardsData = getWizardsData();
+  var wizardsData = getPackOfWizardsData(elementsQuantity, getRandomWizardData);
 
   for (var i = 0; i < wizardsData.length; i++) {
     fragment.appendChild(renderWizard(wizardsData[i]));
@@ -135,10 +127,10 @@ function prepareWizardsElements() {
   return fragment;
 }
 
-function getWizardsData() {
+function getPackOfWizardsData(count, getWizardData) {
   var wizardsDataList = [];
-  for (var i = 0; i <= WIZARD_COUNT; i++) {
-    wizardsDataList[i] = getRandomWizardData();
+  for (var i = 0; i <= count; i++) {
+    wizardsDataList[i] = getWizardData();
   }
   return wizardsDataList;
 }
@@ -232,16 +224,10 @@ function hideElement(element) {
 }
 
 function getNextItem(oldItem, items) {
-  var nextIndex = 1;
-  var oldItemIndex;
+  var nextIndex = oldItem ? items.indexOf(oldItem) + 1 : 1;
 
-  if (oldItem) {
-    oldItemIndex = items.indexOf(oldItem);
-    nextIndex = oldItemIndex + 1;
-
-    if (nextIndex === items.length) {
-      nextIndex = 0;
-    }
+  if (nextIndex === items.length) {
+    nextIndex = 0;
   }
 
   return items[nextIndex];
