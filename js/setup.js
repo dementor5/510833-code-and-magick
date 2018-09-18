@@ -66,6 +66,7 @@ var fireballWrapHiddenInput =
 
 appendWizardsOnPage(prepareWizardsElements(WIZARD_COUNT));
 showElement(setupSimilar);
+setDefaultCharacterColors();
 
 setupOpen.addEventListener('click', function () {
   openPopup();
@@ -102,15 +103,15 @@ userNameInput.addEventListener('input', function () {
 
 
 wizardCoat.addEventListener('click', function () {
-  changeWizardCoatColor();
+  setNextCoatColor();
 });
 
 wizardEyes.addEventListener('click', function () {
-  changeWizardEyesColor();
+  setNextEyesColor();
 });
 
 fireballWrap.addEventListener('click', function () {
-  changeWizardFireballsColor();
+  setNextFireballsColor();
 });
 
 function appendWizardsOnPage(wizardsElements) {
@@ -180,29 +181,32 @@ function onPopupEscPress(evt) {
   }
 }
 
-function changeWizardCoatColor() {
-  var oldCoatColor = wizardCoat.style.fill;
-  var newColor = getNextItem(oldCoatColor, WIZARD_COATS_COLORS);
+function setDefaultCharacterColors() {
+  setNextCoatColor(WIZARD_COATS_COLORS[0]);
+  setNextEyesColor(WIZARD_EYES_COLORS[0]);
+  setNextFireballsColor(WIZARD_FIREBALL_COLORS[0]);
+}
+
+function setNextCoatColor(newColor) {
+  newColor = newColor ? newColor :
+    getNextArrayItem(wizardCoat.style.fill, WIZARD_COATS_COLORS);
   wizardCoat.style.fill = newColor;
   wizardCoatHiddenInput.value = newColor;
 }
 
-function changeWizardEyesColor() {
-  var oldEyesColor = wizardEyes.style.fill;
-  var newColor = getNextItem(oldEyesColor, WIZARD_EYES_COLORS);
+function setNextEyesColor(newColor) {
+  newColor = newColor ? newColor :
+    getNextArrayItem(wizardEyes.style.fill, WIZARD_EYES_COLORS);
   wizardEyes.style.fill = newColor;
   wizardEyesHiddenInput.value = newColor;
 }
 
-function changeWizardFireballsColor() {
-  var oldFireballsColor = fireballWrap.style.backgroundColor;
-  var newColor;
-
-  if (oldFireballsColor) {
-    oldFireballsColor = rgb2hex(oldFireballsColor);
-  }
-
-  newColor = getNextItem(oldFireballsColor, WIZARD_FIREBALL_COLORS);
+function setNextFireballsColor(newColor) {
+  newColor = newColor ? newColor :
+    getNextArrayItem(
+        rgb2hex(fireballWrap.style.backgroundColor),
+        WIZARD_FIREBALL_COLORS
+    );
   fireballWrap.style.backgroundColor = newColor;
   fireballWrapHiddenInput.value = newColor;
 }
@@ -223,7 +227,7 @@ function hideElement(element) {
   element.classList.add(HIDE_CLASS);
 }
 
-function getNextItem(oldItem, items) {
+function getNextArrayItem(oldItem, items) {
   var nextItem = items[items.indexOf(oldItem) + 1];
   return nextItem ? nextItem : items[0];
 }
