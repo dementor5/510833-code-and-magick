@@ -66,8 +66,7 @@ var fireballWrapHiddenInput =
 
 appendWizardsOnPage(prepareWizardsElements(WIZARD_COUNT));
 showElement(setupSimilar);
-setDefaultCharacterColors();
-
+setDefaultEyesColors();
 setupOpen.addEventListener('click', function () {
   openPopup();
 });
@@ -100,7 +99,6 @@ userNameInput.addEventListener('input', function () {
     userNameInput.setCustomValidity('');
   }
 });
-
 
 wizardCoat.addEventListener('click', function () {
   setNextCoatColor();
@@ -181,15 +179,13 @@ function onPopupEscPress(evt) {
   }
 }
 
-function setDefaultCharacterColors() {
-  setNextCoatColor(WIZARD_COATS_COLORS[0]);
+function setDefaultEyesColors() {
   setNextEyesColor(WIZARD_EYES_COLORS[0]);
-  setNextFireballsColor(WIZARD_FIREBALL_COLORS[0]);
 }
 
 function setNextCoatColor(newColor) {
   newColor = newColor ? newColor :
-    getNextArrayItem(wizardCoat.style.fill, WIZARD_COATS_COLORS);
+    getNextArrayItem(getComputedStyle(wizardCoat).fill, WIZARD_COATS_COLORS);
   wizardCoat.style.fill = newColor;
   wizardCoatHiddenInput.value = newColor;
 }
@@ -204,7 +200,7 @@ function setNextEyesColor(newColor) {
 function setNextFireballsColor(newColor) {
   newColor = newColor ? newColor :
     getNextArrayItem(
-        rgb2hex(fireballWrap.style.backgroundColor),
+        rgb2hex(getComputedStyle(fireballWrap).backgroundColor),
         WIZARD_FIREBALL_COLORS
     );
   fireballWrap.style.backgroundColor = newColor;
