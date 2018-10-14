@@ -21,8 +21,8 @@
     dragged = true;
 
     var shift = {
-      x: startCoords.x - evt.clientX,
-      y: startCoords.y - evt.clientY
+      x: evt.clientX - startCoords.x,
+      y: evt.clientY - startCoords.y
     };
 
     startCoords = {
@@ -30,8 +30,8 @@
       y: evt.clientY
     };
 
-    setup.style.top = (setup.offsetTop - shift.y) + 'px';
-    setup.style.left = (setup.offsetLeft - shift.x) + 'px';
+    setup.style.top = setup.offsetTop + shift.y + 'px';
+    setup.style.left = setup.offsetLeft + shift.x + 'px';
   }
 
   function onMouseUp() {
