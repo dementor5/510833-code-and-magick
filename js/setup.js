@@ -1,6 +1,8 @@
 'use strict';
 (function () {
   var HOVER_COLOR = 'yellow';
+  var ON = true;
+  var OFF = false;
   var setupSimilarEl = document.querySelector('.setup-similar');
   var setupSimilarListEl = document.querySelector('.setup-similar-list');
   var setupEl = window.dialog.getSetupEl();
@@ -67,12 +69,12 @@
 
     shopEl.addEventListener('dragenter', function (evt) {
       if (evt.target !== shopEl) {
-        setHoverBackground(evt.target, 'on');
+        setHoverBackground(evt.target, ON);
       }
     });
 
     shopEl.addEventListener('dragleave', function (evt) {
-      setHoverBackground(evt.target, 'off');
+      setHoverBackground(evt.target, OFF);
     });
 
     shopEl.addEventListener('dragover', function (evt) {
@@ -81,7 +83,7 @@
 
     shopEl.addEventListener('drop', function (evt) {
       evt.target.appendChild(draggedItem);
-      setHoverBackground(evt.target, 'off');
+      setHoverBackground(evt.target, OFF);
     });
   }
 
@@ -91,11 +93,11 @@
     });
 
     backpackEl.addEventListener('dragenter', function (evt) {
-      setHoverBackground(evt.target, 'on');
+      setHoverBackground(evt.target, ON);
     });
 
     backpackEl.addEventListener('dragleave', function (evt) {
-      setHoverBackground(evt.target, 'off');
+      setHoverBackground(evt.target, OFF);
     });
 
     backpackEl.addEventListener('dragover', function (evt) {
@@ -104,7 +106,7 @@
 
     backpackEl.addEventListener('drop', function (evt) {
       evt.target.appendChild(draggedItem);
-      setHoverBackground(evt.target, 'off');
+      setHoverBackground(evt.target, OFF);
     });
   }
 
@@ -115,14 +117,7 @@
   }
 
   function setHoverBackground(el, flag) {
-    switch (flag) {
-      case 'on':
-        el.style.backgroundColor = HOVER_COLOR;
-        break;
-      case 'off':
-        el.style.backgroundColor = '';
-        break;
-    }
+    el.style.background = flag ? HOVER_COLOR : '';
   }
 
   function appendWizardsOnPage() {
