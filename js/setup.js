@@ -3,9 +3,12 @@
   var HOVER_COLOR = 'yellow';
   var ON = true;
   var OFF = false;
+  var MAX_WIZARDS_COUNT = 4;
+  var errorMessageEl = document.querySelector('.error-message');
   var setupSimilarEl = document.querySelector('.setup-similar');
   var setupSimilarListEl = document.querySelector('.setup-similar-list');
   var setupEl = window.dialog.getSetupEl();
+  var setupFormEl = setupEl.querySelector('.setup-wizard-form');
   var setupWizardEl = setupEl.querySelector('.setup-wizard');
   var userWizardCoatEl = setupWizardEl.querySelector('.wizard-coat');
   var userWizardCoatHiddenInputEl = setupEl.querySelector('[name=coat-color]');
@@ -19,12 +22,35 @@
   var shopEl = setupEl.querySelector('.setup-artifacts-shop');
   var backpackEl = setupEl.querySelector('.setup-artifacts');
   var draggedItem = null;
-  var wizardsData = window.data.getWizardsInfo();
 
+  addEventListenerOnForm();
   addListenersOnUserWizard();
   addListenerOnShopEl();
   addListenersOnBackpackEl();
-  appendWizardsOnPage();
+  // appendWizardsOnPage(window.data.getWizardsInfo(MAX_WIZARDS_COUNT));
+  window.backend.load(appendWizardsOnPage, onError);
+
+  function addEventListenerOnForm() {
+    setupFormEl.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+      sendForm();
+    });
+  }
+
+  function sendForm() {
+    var formData = new FormData(setupFormEl);
+    window.backend.save(formData, onSuccess, onError);
+  }
+
+  function onSuccess() {
+    window.dialog.closePopup();
+    errorMessageEl.classList.add('hidden');
+  }
+
+  function onError(errorMessage) {
+    errorMessageEl.textContent = errorMessage;
+    errorMessageEl.classList.remove('hidden');
+  }
 
   function addListenersOnUserWizard() {
     userWizardCoatEl.addEventListener('click', function () {
@@ -42,14 +68,14 @@
 
   function setNextCoatColor() {
     var currentColor = getComputedStyle(userWizardCoatEl).fill;
-    var nextColor = window.data.getNextCoatColor(currentColor);
+    var nextColor = window.color.getNextCoat(currentColor);
     userWizardCoatEl.style.fill = nextColor;
     userWizardCoatHiddenInputEl.value = nextColor;
   }
 
   function setNextFireballsColor() {
     var currentColor = getComputedStyle(fireballWrapEl).backgroundColor;
-    var nextColor = window.data.getNextFireballsColor(currentColor);
+    var nextColor = window.color.getNextFireballs(currentColor);
 
     fireballWrapEl.style.backgroundColor = nextColor;
     fireballWrapHiddenInputEl.value = nextColor;
@@ -57,7 +83,7 @@
 
   function setNextEyesColor() {
     var currentColor = userWizardEyesEl.style.fill;
-    var nextColor = window.data.getNextEyesColor(currentColor);
+    var nextColor = window.color.getNextEyes(currentColor);
     userWizardEyesEl.style.fill = nextColor;
     userWizardEyesHiddenInputEl.value = nextColor;
   }
@@ -120,13 +146,14 @@
     el.style.background = flag ? HOVER_COLOR : '';
   }
 
-  function appendWizardsOnPage() {
-    var wizardsFragment = getWizardsFragment();
+  function appendWizardsOnPage(data) {
+    var wizardsData = window.util.getRandomEls(data, MAX_WIZARDS_COUNT);
+    var wizardsFragment = getWizardsFragment(wizardsData);
     setupSimilarEl.classList.remove('hidden');
     setupSimilarListEl.appendChild(wizardsFragment);
   }
 
-  function getWizardsFragment() {
+  function getWizardsFragment(wizardsData) {
     var fragment = document.createDocumentFragment();
     wizardsData.forEach(function (it) {
       var newWizardEl = getNewWizardEl(it);
@@ -143,8 +170,8 @@
     var wizardEyes = wizardEl.querySelector('.wizard-eyes');
 
     wizardFullName.textContent = wizardInfo.name;
-    wizardCoat.style.fill = wizardInfo.coatColor;
-    wizardEyes.style.fill = wizardInfo.eyesColor;
+    wizardCoat.style.fill = wizardInfo.colorCoat;
+    wizardEyes.style.fill = wizardInfo.colorEyes;
 
     return wizardEl;
   }

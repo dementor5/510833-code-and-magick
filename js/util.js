@@ -29,6 +29,30 @@
     return arr[randomIndex];
   }
 
+  function getRandomEls(data, count) {
+    if (data.length > count) {
+      var dataCopy = data.slice();
+      var temp = [];
+
+      for (var i = 0; i < count; i++) {
+        temp.push(getRandomUniqueArrayEl(dataCopy));
+      }
+
+      data = temp;
+    }
+
+    return data;
+  }
+
+  function getRandomUniqueArrayEl(array) {
+    var min = 0;
+    var max = array.length - 1;
+    var randomIndex = getRandomInRange(min, max);
+    var element = array[randomIndex];
+    array.splice(randomIndex, 1);
+    return element;
+  }
+
   function isEscEvent(evt, action) {
     if (evt.keyCode === ESC_KEYCODE) {
       action();
@@ -46,6 +70,7 @@
     rgbToHex: rgbToHex,
     getNextArrayItem: getNextArrayItem,
     getRandomArrayItem: getRandomArrayItem,
+    getRandomEls: getRandomEls,
     isEscEvent: isEscEvent,
     isEnterEvent: isEnterEvent
   };

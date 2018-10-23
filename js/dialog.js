@@ -115,7 +115,8 @@
   }
 
   window.dialog = {
-    getSetupEl: getSetupEl
+    getSetupEl: getSetupEl,
+    closePopup: closePopup
   };
 })();
 
